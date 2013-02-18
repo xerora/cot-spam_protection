@@ -139,7 +139,6 @@ function spam_protection_check(array &$data = array())
 			$is_spam = $result[1]->allow=="true" ? FALSE : TRUE;	
 		} catch (Exception $e) 
 		{
-			die(var_dump($e));
 			$is_spam = FALSE;
 		}
 		return array('is_spam' => (bool)$is_spam);

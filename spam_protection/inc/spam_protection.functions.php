@@ -2,7 +2,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-$cfg['debug_spam_protection'] = TRUE;
+$cfg['debug_spam_protection'] = TRUE; // If TRUE: dont send corrections back to spam services 
 
 define('SP_DEFAULT_ORDERBY', 'desc');
 define('SP_RELPATH', $cfg['plugins_dir'].'/spam_protection');

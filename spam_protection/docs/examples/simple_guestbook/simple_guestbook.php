@@ -48,8 +48,7 @@ if($a=='send')
 		$spam_check_result = spam_protection_check($spam_data);
 		if($spam_check_result['is_spam'])
 		{
-			// Item is considered spam. Just skip posting. 
-			// Giving indication that the item was rejected is usually not advised
+			// Item was found to be spam
 			spam_protection_queue_add($spam_data);
 			cot_redirect(cot_url('simple_guestbook'));
 		}

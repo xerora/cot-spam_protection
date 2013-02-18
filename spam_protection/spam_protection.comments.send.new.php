@@ -31,6 +31,7 @@ if((bool)$cfg['plugin']['spam_protection']['filter_comments'])
 		if((bool)$cfg['plugin']['spam_protection']['notify_poster'])
 		{
 			require_once cot_langfile('spam_protection', 'plug');
+			unset($L['com_commentadded']);
 			cot_message($L['sp_notify_comment_marked_spam']);
 		}
 	}

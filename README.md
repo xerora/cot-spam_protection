@@ -1,15 +1,12 @@
 
-What this plugin does:
------------------------------------
+## What this plugin does
 
-- Filters comment and forum spam with your choice of services (Akismet, Defensio, Typepad Anti-Spam). Forum filtering is disabled by default and must be enabled in the plugin configuration.
-- Add your own section adapters to enable your modules/plugins to use the adminstration queue when filtering spam.
-- Provides an administration tool to manage spam items.
+- Filters comment, forum and other spam with your choice of services (Akismet, Defensio, Typepad Anti-Spam). Forum filtering is disabled by default. (It is not recommended to use forum filtering if you use plugins that alter the forum module as this could easily effect this plugin.)
+- Provides an administration tool to manage items marked as spam.
+- Allows you to filter spam in your extensions.
+- Add your own section adapters to enable your extensions to use the adminstration queue when filtering spam.
 
-Installation:
------------------------------------
-
-Backup your database as a precaution.
+## Installation
 
 1. Decide which spam service you wish to use. Register at the service you choose to use and obtain an API key.
 	- Akismet: http://akismet.com
@@ -19,19 +16,100 @@ Backup your database as a precaution.
 3. Install the plugin in the administration panel.
 4. Go into the plugin's configurations in the admin panel and select your spam service and enter your API key.
 5. Check to see that everything is configured to your preference.
-6. The rest is up to your spam service and you can find all spam items caught in Administration -> Tools -> Spam Protection
+6. The rest is up to your spam service and you can find all spam items caught in Administration -> Other -> Spam Protection
 
-Complete removal:
------------------------------------
+## Complete removal
 
 The following is to completely remove this plugin.
-
+ 
 1. Uninstall the plugin in the Cotonti plugin administration
 2. Delete the plugin folder "spam_protection" in your plugins folder
-3. Delete the database table ( usually cot_spam_protection ) in phpMyAdmin or the likes
+3. Delete the database table ( usually cot\_spam_protection ) in phpMyAdmin or the likes
 
-Notes:
------------------------------------
+## Spam filtering in your extensions
+
+An example of what it would look like to add spam filtering to your extension:
+
+```PHP
+if(cot_plugin_active('spam_protection'))
+{
+	require_once cot_incfile('spam_protection', 'plug');
+	$spam_data = array(
+		'content' => 'The text/body/message that is in need of review',
+		'authorname' => $usr['name'],
+		'authoremail' => $usr['profile']['user_email'],
+		'authorid' => $usr['id'],
+		'authorip' => $usr['ip'],
+		'date' => $sys['now'],
+		'section' => 'your_plugin_name_or_something_simple',
+		'data' => array('some_table_or_something_simple' => $rmsg), 
+	);
+	$spam_check_result = spam_protection_check($spam_data);
+	if($spam_check_result['is_spam'])
+	{
+		// Item was returned as spam
+		spam_protection_queue_add($spam_data); // Add to the moderation queue if you want. Not required.
+	}
+}
+```
+
+#### $spam_data options
+* `content`: The body of text you need to review.
+* `authorname`: The name of the author.
+* `authoremail`: The email address of the author.
+* `authorid`: The Cotonti user id of the author.
+* `authorip`: The IP address of the author.
+* `referrer`: The request referrer.
+* `date`: The current date timestamp at the time of the posting.
+* `section`: A simple name or plugin name that is a "file safe" name. This will be your section adapter name if you send the item to the moderation queue.
+* `subsection`: Provide some sort of unqiue identifier for taking special actions on an item in a section when marking as ham/spam in the moderation queue. (eg. section is 'forum' and subsection could be 'post')
+* `data`: An array in which you store data that is withheld from being submitted into the database. This data can be used to restore your item when you mark it as ham in the moderation queue.
+
+## Section adapters:
+
+Section adapters allow you to add your own spam filtered items to the moderation queue. 
+
+To enable queue moderation on your custom filtered items, simply:
+
+- Create a file named after the section you assigned your items to (eg section => 'guestbook' would be guestbook.php) and place it
+in adapters/sections. Go to the admin panel and clear the internal cache on sp_available_sections. You will now see your items that have been marked for spam in the admin tool of this plugin.
+- To be able to take action on the items in the queue, you must define the functions spam_protection_queue_ham(array $item, $service, array $data) for the Mark as Ham action and spam_protection_queue_spam(array $item, $service, array $data) for the Mark as Spam action in your adapter. You don't have to define all the params if you don't want, but they will be sent in that order. You will need to write how you want to deal with an item when you mark it for an action. Items will be ran through these functions one at a time. Refer to the "Available callback functions" section in the README for further information on possible options.
+
+For further information, you can refer to the comments.php adapter as it is a simple example.
+
+## Available callback functions in section adapters:
+
+A list of functions that will get used at the time you mark an item for spam or ham in the moderation queue if defined.
+
+##### spam\_protection\_queue\_ham(array $item, $service, array $data)
+ 
+Used on each item one at a time when you use the action 'Mark as Ham' in the moderation queue.
+
+* `$item`: An array of the spam_protection table row data for the item.
+* `$service`: The service object that contains the spam data already setup.
+* `$data`: An array of data from sp\_data row in spam\_protection. Contains data that was with held when item was sent to spam queue.
+
+##### spam\_protection\_queue\_spam(array $item, $service, array $data)
+
+Used on each item one at a time when you use the action 'Mark as Spam' in the moderation queue. 
+
+* `$item`: An array of the spam_protection table row data for the item.
+* `$service`: The service object that contains the spam data already setup.
+* `$data`: An array of data from sp\_data row in spam\_protection. Contains data that was withheld when item was sent to spam queue.
+
+##### spam\_protection\_queue\_after($type)
+
+Ran after the whole queue is marked. 
+
+* `$type`: Either 'spam' or 'ham'
+
+##### spam\_protection\_queue\_before($type)
+
+Ran before the queue is marked. 
+
+* `$type`: Either 'spam' or 'ham'
+
+## Notes
 
 - You can NOT enable multiple services for filtering an item. You can only have one spam filtering service running.
 - You can rename the spam_protection database table by defining it in your config.php:
@@ -42,5 +120,4 @@ Notes:
 	This plugin creates the database table when installed through the administration panel. You can just reinstall the plugin after
 	defining the new table name in the config but ensure the old table is removed as it is not needed.
 
-- Spam filtering is disabled when NO API key is present in the plugin configuration.
-- Your site will continue working as normal if your API key is not present or not valid, but spam services will not work. 
+- Spam filtering is disabled when NO API key is present in the plugin configuration. Your site will continue working as normal if your API key is not present or not valid, but spam services will not work.

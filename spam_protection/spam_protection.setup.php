@@ -28,5 +28,7 @@ use_ajax=08:radio::1:Use AJAX in plugin's administration tool
 [END_COT_EXT_CONFIG]
 ==================== */
 
+defined('COT_CODE') or die('Wrong URL');
+
 
 ?>

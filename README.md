@@ -53,19 +53,9 @@ if(cot_plugin_active('spam_protection'))
 }
 ```
 
-#### $spam_data options
-* `content`: The body of text you need to review.
-* `authorname`: The name of the author.
-* `authoremail`: The email address of the author.
-* `authorid`: The Cotonti user id of the author.
-* `authorip`: The IP address of the author.
-* `referrer`: The request referrer.
-* `date`: The current date timestamp at the time of the posting.
-* `section`: A simple name or plugin name that is a "file safe" name. This will be your section adapter name if you send the item to the moderation queue.
-* `subsection`: Provide some sort of unqiue identifier for taking special actions on an item in a section when marking as ham/spam in the moderation queue. (eg. section is 'forum' and subsection could be 'post')
-* `data`: An array in which you store data that is withheld from being submitted into the database. This data can be used to restore your item when you mark it as ham in the moderation queue.
+See __spam_protection_check__ below for more options to pass.
 
-## Section adapters:
+## Section adapters
 
 Section adapters allow you to add your own spam filtered items to the moderation queue. 
 
@@ -77,7 +67,7 @@ in adapters/sections. Go to the admin panel and clear the internal cache on sp_a
 
 For further information, you can refer to the comments.php adapter as it is a simple example.
 
-## Available callback functions in section adapters:
+## Available callback functions in section adapters
 
 A list of functions that will get used at the time you mark an item for spam or ham in the moderation queue if defined.
 
@@ -108,6 +98,81 @@ Ran after the whole queue is marked.
 Ran before the queue is marked. 
 
 * `$type`: Either 'spam' or 'ham'
+
+## Available service adapter functions
+
+Functions that are available from any spam service that you use and can be used anywhere you include this plugin.
+
+##### spam_protection_service_connection()
+
+Used to create a new service object for use with the spam service
+
+* `return`: The service object that has been created.
+
+##### spam_protection_service_setup($service, array $data)
+
+Used to load the service object with spam data.
+
+* `$service`: The service object
+* `$data`: An array of the spam data to be checked / used
+* `return`: Service object with spam data loaded
+
+##### spam_protection_service_validate_key([$service])
+
+Validate the spam service API key entered for the service.
+
+* `$service`: _optional_, A service object. One will be created if not passed.
+* `return`: A boolean whether the key is valid or not.
+
+##### spam_protection_service_submit_ham($service)
+
+Submit false positives to the spam service in order to make it more knowledgeable in the future.
+
+* `$service`: A service object with spam data loaded into it.
+* `return`: A boolean whether the submit was completed or not.
+
+##### spam_protection_service_submit_spam($service)
+
+Submit false negatives to the spam service in order to make it more knowledgeable in the future.
+
+* `$service`: A service object with spam data loaded into it.
+* `return`: A boolean whether the submit was completed or not.
+
+##### spam_protection_check($data)
+
+Send data to the spam service for validation.
+
+* `$data`: An array of data to validate against.
+	
+	__Options__ 
+	* `content`: The body of text you need to review.
+	* `authorname`: The name of the author.
+	* `authoremail`: The email address of the author.
+	* `authorid`: The Cotonti user id of the author.
+	* `authorip`: The IP address of the author.
+	* `referrer`: The request referrer.
+	* `date`: The current date timestamp at the time of the posting.
+	* `section`: A simple name or plugin name that is a "file safe" name. This will be your section adapter name if you send the item to the moderation queue.
+	* `subsection`: Provide some sort of unqiue identifier for taking special actions on an item in a section when marking as ham/spam in the moderation queue. (eg. section is 'forum' and subsection could be 'post')
+	* `data`: An array in which you store data that is withheld from being submitted into the database. This data can be used to restore your item when you mark it as ham in the moderation queue.
+* `return`: An array with a key 'is_spam' that is a boolean stating whether item is spam or not.
+
+```PHP
+$spam_data = array(
+	'content' => 'blahblah viagra blahblah',
+	'authorname' => 'viagra-user',
+	'authoremail' => 'viagra@drugs.com'
+);
+$result = spam_protection_check($spam_data);
+if($result['is_spam'])
+{
+	// is spam
+}
+else
+{
+	// not spam
+}
+```
 
 ## Notes
 

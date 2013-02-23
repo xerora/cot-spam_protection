@@ -50,7 +50,7 @@ function spam_protection_get_service_alias($service)
 function spam_protection_default_queue_delete($item)
 {
 	global $db, $db_spam_protection;
-	return $db->query("DELETE FROM $db_spam_protection WHERE sp_id=?", (int)$item);
+	return $db->delete($db_spam_protection, 'sp_id=?', $item);
 }
 
 /**

@@ -49,6 +49,20 @@ function spam_protection_service_submit_ham(Akismet $service)
 	return $finished;
 }
 
+function spam_protection_service_submit_spam(Akismet $service)
+{
+	$finished = FALSE;
+	try 
+	{
+		$service->submitSpam();
+		$finished = TRUE;
+	}
+	catch(Exception $e)
+	{
+		$finished = FALSE;
+	}
+	return $finished;
+
 function spam_protection_service_setup(Akismet $service, array $data)
 {
 	global $cfg;

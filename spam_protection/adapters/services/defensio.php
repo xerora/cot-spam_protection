@@ -55,8 +55,18 @@ function spam_protection_service_submit_ham(Defensio $service)
 
 function spam_protection_service_submit_spam(Defensio $service)
 {
-	$post_result = $service->postDocument();
-	$put_result = $service->putDocument($post_result[1]->signature, array('allow' => 'false'));
+	$finished = FALSE;
+	try
+	{
+		$post_result = $service->postDocument();
+		$put_result = $service->putDocument($post_result[1]->signature, array('allow' => 'false'));
+		$finished = TRUE;
+	}
+	catch(Exception $e)
+	{
+		$finished = FALSE;
+	}
+	return $finished;
 }
 
 function spam_protection_service_setup(Defensio $service, array $data) 

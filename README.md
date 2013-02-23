@@ -138,6 +138,18 @@ Submit false negatives to the spam service in order to make it more knowledgeabl
 * `$service`: A service object with spam data loaded into it.
 * `return`: A boolean whether the submit was completed or not.
 
+```PHP
+$service = spam_protection_service_connection();
+$service = spam_protection_service_setup($service, array(
+	'content' => $row['text'],
+	'authorname' => $row['author'],
+	'authorid' => $row['authorid'],
+	'authorip' => $row['authorip'],
+	'date' => $row['date'],
+));
+spam_protection_service_submit_spam($service);
+```
+
 ##### spam_protection_check($data)
 
 Send data to the spam service for validation.

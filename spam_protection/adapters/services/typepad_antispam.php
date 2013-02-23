@@ -56,6 +56,21 @@ function spam_protection_service_submit_ham($service)
 	return $finished; 
 }
 
+function spam_protection_service_submit_spam($service)
+{
+	$finished = FALSE;
+	try
+	{
+		$service->submitSpam();
+		$finished = TRUE;
+	}
+	catch(Exception $e)
+	{
+		$finished = FALSE;
+	}
+	return $finished;
+}
+
 function spam_protection_service_setup($service, array $data)
 {
 	global $cfg;

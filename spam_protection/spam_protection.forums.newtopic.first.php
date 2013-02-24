@@ -21,6 +21,7 @@ if((bool)$cfg['plugin']['spam_protection']['filter_forums'])
 		// always mark the topic as private if an error is hit.
 		$cfg['forums']['cat_' . $s]['allowprvtopics'] = 1;
 		$_POST['rtopicmode'] = 1;
+		$cfg['forums']['cat_' . $s]['countposts'] = 0;
 	}
 }
 ?>

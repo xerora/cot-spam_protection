@@ -62,6 +62,7 @@ function spam_protection_service_submit_spam(Akismet $service)
 		$finished = FALSE;
 	}
 	return $finished;
+}
 
 function spam_protection_service_setup(Akismet $service, array $data)
 {

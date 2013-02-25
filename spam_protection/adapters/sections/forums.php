@@ -18,7 +18,7 @@ function spam_protection_queue_ham(array $item, $service, array $data)
 					spam_protection_queue_ham_forum_post($item, $service, $data))
 				{
 					cot_forums_sectionsetlast($data['forum_posts']['fp_cat'], "fs_postcount+1", "fs_topiccount+1");
-					spam_protection_default_queue_delete($item['sp_id']);
+					spam_protection_queue_remove($item['sp_id']);
 				}
 			}
 		break;
@@ -27,7 +27,7 @@ function spam_protection_queue_ham(array $item, $service, array $data)
 
 function spam_protection_queue_spam(array $item)
 {
-	return spam_protection_default_queue_spam($item['sp_id']);
+	return spam_protection_queue_remove($item['sp_id']);
 }
 
 function spam_protection_queue_ham_forum_post(array $item, $service, array $data)
@@ -39,7 +39,7 @@ function spam_protection_queue_ham_forum_post(array $item, $service, array $data
 		$update_topic_lastpost = $db->query("SELECT ft_updated from $db_forum_topics WHERE ft_id=? LIMIT 1", $forum_post_data['fp_topicid'])->fetchColumn();
 		if(!$update_topic_lastpost && $item['sp_subsection']=='post')
 		{
-			spam_protection_default_queue_delete($item['sp_id']);
+			spam_protection_queue_remove($item['sp_id']);
 			cot_log(sprintf($L['sp_log_forum_post_deleted'], $data['forum_posts']['fp_id'], $data['forum_posts']['fp_topicid']), 'plg');
 			return;
 		}
@@ -57,7 +57,7 @@ function spam_protection_queue_ham_forum_post(array $item, $service, array $data
 			{
 				$db->query("UPDATE $db_forum_topics SET ft_postcount=ft_postcount+1".$update_last_query." WHERE ft_id=?", $forum_post_data['fp_topicid']);
 				cot_forums_sectionsetlast($forum_post_data['fp_cat']);
-				spam_protection_default_queue_delete($item['sp_id']);
+				spam_protection_queue_remove($item['sp_id']);
 			}
 			if ($cfg['forums']['cat_' . $forum_post_data['fp_cat']]['countposts'])
 			{

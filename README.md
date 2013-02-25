@@ -1,10 +1,10 @@
 
 ## What this plugin does
 
-- Filters comment, forum and other spam with your choice of services (Akismet, Defensio, Typepad Anti-Spam). Forum filtering is disabled by default. (It is not recommended to use forum filtering if you use plugins that alter the forum module as this could easily effect this plugin.)
+- Filters comment, forum and other spam with your choice of services (Akismet, Defensio, Typepad Anti-Spam). Comment and forum spam filtering is disabled by default. ( It is not recommended to use non-custom adapters for filtering if you use plugins that alter the extension you are filtering spam on. This could have unexpected results unless you know the specifics.)
 - Provides an administration tool to manage items marked as spam.
 - Allows you to filter spam in your extensions.
-- Add your own section adapters to enable your extensions to use the adminstration queue when filtering spam.
+- Add your own section adapters to enable your extensions to use the spam moderation queue when filtering spam.
 
 ## Installation
 
@@ -98,6 +98,13 @@ Ran after the whole queue is marked.
 Ran before the queue is marked. 
 
 * `$type`: Either 'spam' or 'ham'
+
+##### spam\_protection\_check\_data($type, $data)
+
+Ran before the item is marked and can be used to validate/change the data before being marked.
+
+* `$type`: Either 'spam' or 'ham'.
+* `$data`: An array of spam data from the spam_protection database table for the item being marked.
 
 ## Available service adapter functions
 

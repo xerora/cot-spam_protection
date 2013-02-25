@@ -47,7 +47,7 @@ function spam_protection_get_service_alias($service)
 * @param string $item The spam item's ID in spam_protection database table
 * @return bool Where the action was successful or not
 */
-function spam_protection_default_queue_delete($item)
+function spam_protection_queue_remove($item)
 {
 	global $db, $db_spam_protection;
 	return $db->delete($db_spam_protection, 'sp_id=?', $item);
@@ -61,7 +61,7 @@ function spam_protection_default_queue_delete($item)
 */
 function spam_protection_default_queue_spam($item)
 {
-	return spam_protection_default_queue_delete($item);
+	return spam_protection_queue_remove($item);
 }
 
 /**

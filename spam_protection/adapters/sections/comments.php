@@ -12,7 +12,7 @@ function spam_protection_queue_ham(array $item, $service, array $data)
 	{
 		if($db->insert($db_com, $data['com']))
 		{
-			spam_protection_default_queue_delete($item['sp_id']);
+			spam_protection_queue_remove($item['sp_id']);
 		}
 	}
 }

@@ -19,7 +19,7 @@ Lock_members=
 [BEGIN_COT_EXT_CONFIG]
 service_type=01:callback:spam_protection_get_services():Akismet:Spam service API to use
 service_key=02:string:::Spam service API key
-filter_comments=03:radio::1:Filter comment spam
+filter_comments=03:radio::0:Filter comment spam
 filter_forums=04:radio::0:Filter forum spam
 maxperpage=05:select:5,10,15,20,25,30,35,40,45,50,65:15:Max spam items to display in administration tool
 force_all_as_spam=06:radio::0:Send all items into spam collection no matter what ?

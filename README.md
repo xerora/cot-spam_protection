@@ -18,15 +18,7 @@
 5. Check to see that everything is configured to your preference.
 6. The rest is up to your spam service and you can find all spam items caught in Administration -> Other -> Spam Protection
 
-## Complete removal
-
-The following is to completely remove this plugin.
- 
-1. Uninstall the plugin in the Cotonti plugin administration
-2. Delete the plugin folder "spam_protection" in your plugins folder
-3. Delete the database table ( usually cot\_spam_protection ) in phpMyAdmin or the likes
-
-## Spam filtering in your extensions
+## Adding spam filtering to your extensions
 
 An example of what it would look like to add spam filtering to your extension:
 
@@ -35,14 +27,16 @@ if(cot_plugin_active('spam_protection'))
 {
 	require_once cot_incfile('spam_protection', 'plug');
 	$spam_data = array(
-		'content' => 'The text/body/message that is in need of review',
+		'content' => $msg['text'],
 		'authorname' => $usr['name'],
 		'authoremail' => $usr['profile']['user_email'],
 		'authorid' => $usr['id'],
 		'authorip' => $usr['ip'],
 		'date' => $sys['now'],
-		'section' => 'your_plugin_name_or_something_simple',
-		'data' => array('some_table_or_something_simple' => $rmsg), 
+		'section' => 'guestbook',
+		'data' => array(
+			'guestbook' => $msg
+		), 
 	);
 	$spam_check_result = spam_protection_check($spam_data);
 	if($spam_check_result['is_spam'])
@@ -61,25 +55,25 @@ Section adapters allow you to add your own spam filtered items to the moderation
 
 To enable queue moderation on your custom filtered items, simply:
 
-- Create a file named after the section you assigned your items to (eg section => 'guestbook' would be guestbook.php) and place it
-in adapters/sections. Go to the admin panel and clear the internal cache on sp_available_sections. You will now see your items that have been marked for spam in the admin tool of this plugin.
+- Create a file named after the section you assigned your items to (e.g `'section' => 'guestbook'` would be guestbook.php) and place it
+in adapters/sections. Go to the admin panel and clear the internal cache on `sp_available_sections`. You will now see your items that have been marked for spam in the admin tool of this plugin.
 - To be able to take action on the items in the queue, you must define the functions spam_protection_queue_ham(array $item, $service, array $data) for the Mark as Ham action and spam_protection_queue_spam(array $item, $service, array $data) for the Mark as Spam action in your adapter. You don't have to define all the params if you don't want, but they will be sent in that order. You will need to write how you want to deal with an item when you mark it for an action. Items will be ran through these functions one at a time. Refer to the "Available callback functions" section in the README for further information on possible options.
 
 For further information, you can refer to the comments.php adapter as it is a simple example.
 
 ## Available callback functions in section adapters
 
-A list of functions that will get used at the time you mark an item for spam or ham in the moderation queue if defined.
+A list of functions that will get used at the time you mark an item for spam or ham in the moderation queue if defined. 
 
-##### spam\_protection\_queue\_ham(array $item, $service, array $data)
+#### spam_protection_queue_ham(array $item, $service, array $data)
  
 Used on each item one at a time when you use the action 'Mark as Ham' in the moderation queue.
 
 * `$item`: An array of the spam_protection table row data for the item.
 * `$service`: The service object that contains the spam data already setup.
-* `$data`: An array of data from sp\_data row in spam\_protection. Contains data that was with held when item was sent to spam queue.
+* `$data`: An array of data from sp_data row in spam_protection. Contains data that was with held when item was sent to spam queue.
 
-##### spam\_protection\_queue\_spam(array $item, $service, array $data)
+#### spam_protection_queue_spam(array $item, $service, array $data)
 
 Used on each item one at a time when you use the action 'Mark as Spam' in the moderation queue. 
 
@@ -87,19 +81,19 @@ Used on each item one at a time when you use the action 'Mark as Spam' in the mo
 * `$service`: The service object that contains the spam data already setup.
 * `$data`: An array of data from sp\_data row in spam\_protection. Contains data that was withheld when item was sent to spam queue.
 
-##### spam\_protection\_queue\_after($type)
+#### spam_protection_queue_after($type)
 
 Ran after the whole queue is marked. 
 
 * `$type`: Either 'spam' or 'ham'
 
-##### spam\_protection\_queue\_before($type)
+#### spam_protection_queue_before($type)
 
 Ran before the queue is marked. 
 
 * `$type`: Either 'spam' or 'ham'
 
-##### spam\_protection\_check\_data($type, $data)
+#### spam_protection_check_data($type, $data)
 
 Ran before the item is marked and can be used to validate/change the data before being marked.
 
@@ -110,7 +104,7 @@ Ran before the item is marked and can be used to validate/change the data before
 
 Functions that are available from any spam service that you use and can be used anywhere you include this plugin.
 
-##### spam_protection_service_connection()
+#### spam_protection_service_connection()
 
 Used to create a new service object for use with the spam service
 
@@ -124,21 +118,21 @@ Used to load the service object with spam data.
 * `$data`: An array of the spam data to be checked / used
 * `return`: Service object with spam data loaded
 
-##### spam_protection_service_validate_key([$service])
+#### spam_protection_service_validate_key([$service])
 
 Validate the spam service API key entered for the service.
 
 * `$service`: _optional_, A service object. One will be created if not passed.
 * `return`: A boolean whether the key is valid or not.
 
-##### spam_protection_service_submit_ham($service)
+#### spam_protection_service_submit_ham($service)
 
 Submit false positives to the spam service in order to make it more knowledgeable in the future.
 
 * `$service`: A service object with spam data loaded into it.
 * `return`: A boolean whether the submit was completed or not.
 
-##### spam_protection_service_submit_spam($service)
+#### spam_protection_service_submit_spam($service)
 
 Submit false negatives to the spam service in order to make it more knowledgeable in the future.
 
@@ -157,7 +151,19 @@ $service = spam_protection_service_setup($service, array(
 spam_protection_service_submit_spam($service);
 ```
 
-##### spam_protection_check($data)
+#### spam_protection_queue_add($data)
+
+Send spam data to moderation queue for further review. Items marked as spam can still be false positive.
+
+* `$data`: An array of data. See __spam_protection_check__ for options for `$data`
+
+#### spam_protection_queue_remove($id)
+
+Remove item from moderation queue. Just deletes the record from the spam_protection database table.
+
+* `$id`: The integer for the item in spam_protection database table.
+
+#### spam_protection_check($data)
 
 Send data to the spam service for validation.
 
@@ -192,6 +198,14 @@ else
 	// not spam
 }
 ```
+
+## Complete removal
+
+The following is to completely remove this plugin.
+ 
+1. Uninstall the plugin in the Cotonti plugin administration
+2. Delete the plugin folder "spam_protection" in your plugins folder
+3. Delete the database table ( usually cot\_spam_protection ) in phpMyAdmin or the likes
 
 ## Notes
 

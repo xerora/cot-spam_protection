@@ -1,7 +1,6 @@
 <?php
 
 defined('COT_CODE') or die('Wrong URL');
-
 $cfg['debug_spam_protection'] = TRUE; // If TRUE: dont send corrections back to spam services 
 
 define('SP_DEFAULT_ORDERBY', 'desc');
@@ -85,7 +84,15 @@ function spam_protection_queue_add(array $spam_data = array())
 	$submit['sp_content'] = isset($submit['sp_content']) ? preg_replace('/\s\s+/', ' ', strip_tags($submit['sp_content'])) : '';
 	$submit['sp_service'] = isset($submit['sp_service']) ? $submit['sp_service'] : $selected_spam_service;
 	$submit['sp_data'] = serialize($submit['sp_data']); 
-	return $db->insert($db_spam_protection, $submit);
+	if(!empty($submit['sp_section'])) 
+	{
+		$submit['sp_section'] = spam_protection_adapter_name_safe('sections', $submit['sp_section']);
+		return $db->insert($db_spam_protection, $submit);
+	}
+	else 
+	{
+		throw new Exception("Section must be set");
+	}
 }
 
 /**
@@ -128,21 +135,34 @@ function spam_protection_get_adapters($type)
 			{
 				if(mb_substr($adapter, -4)=='.php')
 				{
-					switch($type)
-					{
-						case 'sections':
-							$available_adapters[] = str_replace(array('.php', '_'), array('', ' '), $adapter);
-						break;
-						case 'services':
-							$available_adapters[] = ucwords(str_replace(array('.php', '_'), array('', ' '), $adapter));
-						break;
-					}
+					$available_adapters[] = spam_protection_adapter_name_safe($type, $adapter);
 				}
 			}
 			$cache && $cache->db->store($cache_id, $available_adapters);
 		}
 	}
 	return $available_adapters;
+}
+
+/**
+* Makes sure the adapter names are readable and consistent
+*
+* @param string Adapter type ( sections or services)
+* @param string Adapter name
+* @return string Properly formated adapter name
+*/
+function spam_protection_adapter_name_safe($type, $name)
+{
+	switch($type)
+	{
+		case 'sections':
+			$name = str_replace(array('.php', '_'), array('', ' '), $name);
+		break;
+		case 'services':
+			$name = ucwords(str_replace(array('.php', '_'), array('', ' '), $name));
+		break;
+	}
+	return $name;
 }
 
 /**

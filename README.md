@@ -49,6 +49,20 @@ if(cot_plugin_active('spam_protection'))
 
 See __spam_protection_check__ below for more options to pass.
 
+## Available Tags
+
+### forums.posts.tpl
+
+###### Block: FORUMS_POSTS_ROW
+* `{SP_MARK_AS_SPAM_URL}`: The URL for for sending false negatives back to the spam service and deleting the item.
+* `{SP_MARK_AS_SPAM_LINK}`: A resource that is formatted into a link for marking an item as spam.
+
+### comments.tpl
+
+###### Block: COMMENTS_ROW
+* `{SP_MARK_AS_SPAM_URL}`: The URL for for sending false negatives back to the spam service and deleting the item.
+* `{SP_MARK_AS_SPAM_LINK}`: A resource that is formatted into a link for marking an item as spam.
+
 ## Section adapters
 
 Section adapters allow you to add your own spam filtered items to the moderation queue. 

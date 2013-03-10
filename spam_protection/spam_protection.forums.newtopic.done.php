@@ -35,7 +35,9 @@ if((bool)$cfg['plugin']['spam_protection']['filter_forums'])
 	{
 		$db->query("DELETE FROM $db_forum_topics WHERE ft_id=?", $q);
 		$db->query("DELETE FROM $db_forum_posts WHERE fp_id=?", $p);
+		$db->query("UPDATE $db_users SET user_postcount=user_postcount-1 WHERE user_id=?", $usr['id']);
 		spam_protection_queue_add($spam_data);
+		cot_forums_sectionsetlast($s, "fs_postcount-1", "fs_topiccount-1");
 
 		cot_shield_update(45, "New topic");
 		cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));

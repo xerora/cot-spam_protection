@@ -12,7 +12,7 @@
 
 1. Decide which spam service you wish to use. Register at the service you choose to use and obtain an API key.
 	- Akismet: http://akismet.com
-	- Defensio: http://defensio.com
+	- Defensio: http://defensio.com - Defensio has been having instability issues and has been down for a large amount of time as of March 5th, 2013. Spam filtering won't work when the service is down but will not effect your site.
 	- Typepad Anti-Spam: http://antispam.typepad.com
 2. Download, unpack and upload the spam_protection plugin folder to your plugin directory.
 3. Install the plugin in the administration panel.
@@ -111,7 +111,8 @@ Ran before the queue is marked.
 
 #### spam_protection_check_data($type, $data)
 
-Ran before the item is marked and can be used to validate/change the data before being marked.
+Ran before the item is marked and can be used to validat
+e/change the data before being marked.
 
 * `$type`: Either 'spam' or 'ham'.
 * `$data`: An array of spam data from the spam_protection database table for the item being marked.
@@ -200,7 +201,7 @@ Send spam data to moderation queue for further review. Items marked as spam can 
 
 Remove item from moderation queue. Just deletes the record from the spam_protection database table.
 
-* `$id`: The integer for the item in spam_protection database table.
+* `$id`: The `sp_id` for the item in spam_protection database table.
 
 #### spam_protection_check($data)
 

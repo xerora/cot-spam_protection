@@ -21,13 +21,15 @@ if($sp_markas=='spam')
 		'authorip' => $row['com_authorip'],
 		'date' => $row['com_date'],
 	));
-	spam_protection_service_submit_spam($service);
-	$db->delete($db_com, "com_id=$id");
-	foreach ($cot_extrafields[$db_com] as $exfld)
+	if(spam_protection_service_submit_spam($service))
 	{
-		cot_extrafield_unlinkfiles($row['com_' . $exfld['field_name']], $exfld);
+		$db->delete($db_com, "com_id=$id");
+		foreach ($cot_extrafields[$db_com] as $exfld)
+		{
+			cot_extrafield_unlinkfiles($row['com_' . $exfld['field_name']], $exfld);
+		}
+		cot_redirect(cot_url($url_area, $url_params, '#comments', true));
 	}
-	cot_redirect(cot_url($url_area, $url_params, '#comments', true));
 }
 
 ?>

@@ -11,7 +11,8 @@ $sp_markas = cot_import('markas', 'G', 'ALP');
 if($sp_markas=='spam' && (bool)$cfg['plugin']['spam_protection']['filter_forums'])
 {
 	cot_check_xg();
-	$row = $db->query("SELECT p.*,u.user_name FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid WHERE fp_id=? LIMIT 1", array($p))->fetch();
+	$row = $db->query("SELECT p.fp_text,p.fp_posterid,p.fp_posterip, p.fp_creation,u.user_name FROM $db_forum_posts ".
+		"AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid WHERE fp_id=? LIMIT 1", $p)->fetch();
 	require_once cot_incfile('spam_protection', 'plug');
 	$service = spam_protection_service_connection();
 	$service = spam_protection_service_setup($service, array(

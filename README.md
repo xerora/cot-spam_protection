@@ -8,6 +8,8 @@
 
 ## Installation
 
+*Always backup your database as a precaution*
+
 1. Decide which spam service you wish to use. Register at the service you choose to use and obtain an API key.
 	- Akismet: http://akismet.com
 	- Defensio: http://defensio.com
@@ -139,12 +141,35 @@ Validate the spam service API key entered for the service.
 * `$service`: _optional_, A service object. One will be created if not passed.
 * `return`: A boolean whether the key is valid or not.
 
+```PHP
+if(spam_protection_service_validate_key())
+{
+	// API key is valid
+}
+else 
+{
+	// API key is invalid
+}
+````
+
 #### spam_protection_service_submit_ham($service)
 
 Submit false positives to the spam service in order to make it more knowledgeable in the future.
 
 * `$service`: A service object with spam data loaded into it.
 * `return`: A boolean whether the submit was completed or not.
+
+```PHP
+$service = spam_protection_service_connection();
+$service = spam_protection_service_setup($service, array(
+	'content' => $row['text'],
+	'authorname' => $row['author'],
+	'authorid' => $row['authorid'],
+	'authorip' => $row['authorip'],
+	'date' => $row['date'],
+));
+spam_protection_service_submit_ham($service);
+```
 
 #### spam_protection_service_submit_spam($service)
 

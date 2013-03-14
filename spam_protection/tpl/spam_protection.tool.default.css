@@ -1,0 +1,37 @@
+
+.sp-sections {
+	padding: 5px;
+	border: 1px solid #ccc;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.sp-page-nav {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+div .sp-items-queue {
+	padding: 7px;
+	margin-bottom: 0;
+	overflow: hidden;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}
+
+.sp-view-item-table {
+	width: 100%;
+	border: 1px solid #b8b8b8;
+	background-color: #ddd;
+	padding: 7px;
+}
+
+.sp-pad {
+	padding : 10px;
+}
+
+.sp-table {
+	table-layout: fixed; 
+}
+
+table th, table td { overflow: hidden; }

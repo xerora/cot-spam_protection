@@ -22,7 +22,6 @@ if((bool)$cfg['plugin']['spam_protection']['filter_forums'])
 		'data' => array(
 			'forum_topics' => array(
 				'ft_id' => $q,
-				'ft_mode' => $sp_topicmode,
 			) + $rtopic,
 			'forum_posts' => array(
 				'fp_id' => $p,

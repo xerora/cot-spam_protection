@@ -21,7 +21,7 @@ require_once cot_langfile('spam_protection', 'plug');
 require_once cot_incfile('spam_protection', 'plug');
 require_once cot_incfile('spam_protection', 'plug', 'resources');
 
-cot_rc_link_file(SP_RELPATH.'/inc/spam_protection.tool.'.$sp_admin_theme.'.css');
+cot_rc_link_file(SP_RELPATH.'/tpl/spam_protection.tool.'.$sp_admin_theme.'.css');
 (bool)$cfg['plugin']['spam_protection']['use_ajax'] && cot_rc_link_file(SP_RELPATH.'/inc/spam_protection.tool.js');
 
 $out['subtitle'] = $L['sp_title'];

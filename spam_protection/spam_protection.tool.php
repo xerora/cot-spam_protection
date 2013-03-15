@@ -71,6 +71,7 @@ foreach($sections as $section_return)
 	}
 }
 
+// Ensures $section is valid
 if(($sections_item_count[$section]==0 || !in_array($section, $sections)) && !empty($section))
 {
 	cot_redirect(cot_url('admin', $common_url, '', true));
@@ -217,12 +218,13 @@ else
 			}
 			$t->parse('MAIN.HAS_SPAM.SPAM_ITEMS.VIEW_ITEM');
 		}
+		$view_summary = trim(htmlspecialchars($spam['sp_content']));
 		$t->assign(array(
 			'SP_ITEM_CHECKBOX' => '<input type="checkbox" value="'.$spam['sp_id'].'" id="'.$spam['sp_id'].'" class="sp_item" name="sp_items[]" />',
 			'SP_ITEM_SECTION' => htmlspecialchars($spam['sp_section']),
 			'SP_ITEM_USERNAME' => htmlspecialchars($spam['sp_authorname']),
 			'SP_ITEM_DATE' => cot_date('datetime_medium', (int)$spam['sp_date']),	
-			'SP_ITEM_SUMMARY' => trim(htmlspecialchars($spam['sp_content'])),
+			'SP_ITEM_SUMMARY' => (strlen($view_summary)===150) ? $view_summary.'...' : $view_summary,
 			'SP_ITEM_ORDER_DATE_DESC_ICON' => cot_rc('sp_order_date_desc_icon', array('src' => SP_RELPATH.'/img/arrow-up.gif')),
 			'SP_ITEM_ORDER_DATE_ASC_ICON' => cot_rc('sp_order_date_asc_icon', array('src' => SP_RELPATH.'/img/arrow-down.gif')),
 			'SP_ACTION_ICON_VIEW' => cot_rc('sp_view_icon', array('url' => $view_url, 'title' => $L['sp_action_view_item'], 'src' => SP_RELPATH.'/img/database_table.png')),

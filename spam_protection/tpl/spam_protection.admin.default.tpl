@@ -59,7 +59,7 @@
 			<strong>{PHP.L.sp_with_selected}:</strong> {SP_WITHSELECTED_SELECTBOX} {SP_WITHSELECTED_BUTTON}
 		</div>
 	</div>
-	<table class="cells" style="width: 100%;">
+	<table class="cells sp-table" style="width: 100%;">
 		<tr>
 			<td class="coltop width5">{SP_CHECKALL}</td> 
 			<td class="coltop width10">{PHP.L.Username}</td>
@@ -70,8 +70,8 @@
 	<!-- BEGIN: SPAM_ITEMS -->
 		<tr class="sp_items">
 			<td class="centerall sp-pad">{SP_ITEM_CHECKBOX}</td>
-			<td class="sp-pad">{SP_ITEM_USERNAME}&nbsp;</td>
-			<td>{SP_ITEM_SUMMARY}</td>
+			<td class="sp-pad" style="text-overflow: ellipsis;">{SP_ITEM_USERNAME}&nbsp;</td>
+			<td style="text-overflow: ellipsis;">{SP_ITEM_SUMMARY}</td>
 			<td style="text-align: center;">{SP_ITEM_DATE}</td>
 			<td class="sp_actions" style="text-align:center;">
 				{SP_ACTION_ICON_VIEW} &nbsp;&nbsp; &nbsp; {SP_ACTION_ICON_MARKAS_SPAM} &nbsp;&nbsp; &nbsp; {SP_ACTION_ICON_MARKAS_HAM}
@@ -79,19 +79,17 @@
 		</tr>
 		<!-- BEGIN: VIEW_ITEM -->
 			<tr id="item_{SP_ITEM_VIEW_ID}" class="view_item">
-				<td colspan="5" style="padding: 13px; background-color: #f0f0f0;">
-				<table class="sp-view-item-table" cellspacing="1">
-					<tr>
-						<td colspan="5" style="border: 0px; background-color: #ddd; padding-top: 0px;"><strong>{PHP.L.sp_summary_for_item} #{SP_ITEM_VIEW_ID}</strong> &nbsp; ({PHP.L.sp_without_markup})</td>
-					</tr>
+				<td colspan="5" style="padding: 15px; background-color: #f0f0f0;">
+				<table class="sp-view-item-table sp-table" cellpadding="0" cellspacing="0">
 					<!-- BEGIN: ITEM_DATA -->
-						<tr style="border: 1px solid #ddd;">
-							<td class="width20" style="border: 0px; background-color: #fff; text-align: left;">{SP_ITEM_VIEW_DATA_NAME}</td>
-							<td style="border: 0px; background-color: #fff;" class="width80">{SP_ITEM_VIEW_DATA_VALUE}</td>
+						<tr>
+							<td class="width20" style="border: 1px solid #b8b8b8; background-color: #fff; text-align: left;">{SP_ITEM_VIEW_DATA_NAME}</td>
+							<td colspan="4" style="border: 1px solid #b8b8b8; background-color: #fff; overflow: auto;" class="width80">{SP_ITEM_VIEW_DATA_VALUE}</td>
 						</tr>
 					<!-- END: ITEM_DATA -->
 					<tr class="sp_view_mark" style="display: none;">
-						<td colspan="2" style="border: 0px; background-color: #fff;text-align: right;">{SP_ITEM_MARK_LINK} &nbsp; </td></td>
+						<td colspan="5" style="border: 1px solid #b8b8b8; background-color: #fff;text-align: right;">{SP_ITEM_MARK_LINK} &nbsp; </td>
+					</tr>
 				</table>
 				</td>
 			</tr>

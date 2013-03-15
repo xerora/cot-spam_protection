@@ -1,3 +1,6 @@
+/**
+* Allows for a more dynamic feel to default supported admin templates only 
+*/
 
 window.hidden_views = [];
 window.open_views = [];

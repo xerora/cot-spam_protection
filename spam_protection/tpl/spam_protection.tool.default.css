@@ -21,9 +21,8 @@ div .sp-items-queue {
 
 .sp-view-item-table {
 	width: 100%;
-	border: 1px solid #b8b8b8;
-	background-color: #ddd;
-	padding: 7px;
+	border-collapse: collapse;
+	border: 2px solid #bdbdbd;
 }
 
 .sp-pad {

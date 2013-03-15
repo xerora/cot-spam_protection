@@ -90,7 +90,7 @@
 						</tr>
 					<!-- END: ITEM_DATA -->
 					<tr class="sp_view_mark" style="display: none; border-bottom: 2px solid #c9c9c9; border-top: 0px;">
-						<td colspan="5" style="border-left: 2px solid #c9c9c9; border-right: 2px solid #c9c9c9; background-color: #fff;text-align: right;">{SP_ITEM_MARK_LINK} &nbsp; </td>
+						<td colspan="5" style="border-left: 2px solid #c9c9c9; border-right: 2px solid #c9c9c9; background-color: #fff;text-align: right;">	{SP_ITEM_MARK_LINK} &nbsp; </td>
 					</tr>
 				</table>
 				</td>

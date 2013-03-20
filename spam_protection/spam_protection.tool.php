@@ -219,6 +219,7 @@ else
 			$t->parse('MAIN.HAS_SPAM.SPAM_ITEMS.VIEW_ITEM');
 		}
 		$view_summary = trim(htmlspecialchars($spam['sp_content']));
+		$pagetotal = $pagenav['total']===null ? 0 : (int)$pagenav['total'];
 		$t->assign(array(
 			'SP_ITEM_CHECKBOX' => '<input type="checkbox" value="'.$spam['sp_id'].'" id="'.$spam['sp_id'].'" class="sp_item" name="sp_items[]" />',
 			'SP_ITEM_SECTION' => htmlspecialchars($spam['sp_section']),
@@ -236,7 +237,6 @@ else
 			));
 		$t->parse('MAIN.HAS_SPAM.SPAM_ITEMS');
 	}
-		
 	$t->assign(array(
 		'SP_SECTION_NAME' => ucwords($section),
 		'SP_CHECKALL' => cot_checkbox(false, 'sp_checkall', '', array('id' => 'sp_checkall', 'title' => $L['sp_action_checkall'], 'style' => 'display: none;')),	
@@ -244,6 +244,7 @@ else
 		'SP_PAGENAV_MAIN' => $pagenav['main'],
 		'SP_PAGENAV_PREV' => $pagenav['prev'],
 		'SP_PAGENAV_NEXT' => $pagenav['next'],
+		'SP_PAGENAV_TOTAL' => $pagetotal,
 		'SP_FORM_ACTION' => cot_url('admin', $common_url.'&action=mark&section='.$section.'&orderby='.$orderby.'&d='.$pg),
 		'SP_WITHSELECTED_SELECTBOX' => cot_selectbox('', 'sp_withselected[]', array('spam', 'ham'), array($L['sp_action_markas_spam'], $L['sp_action_markas_ham']), true, array('class' => 'sp_withselected')),
 		'SP_WITHSELECTED_BUTTON' => cot_inputbox('submit', '', $L['sp_action_perform_action'], array('class' => 'sp_withselected_button')), 

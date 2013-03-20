@@ -71,11 +71,11 @@ Section adapters allow you to add your own spam filtered items to the moderation
 
 To enable queue moderation on your custom filtered items, simply:
 
-- Create a file named after the section you assigned your items to (e.g `'section' => 'guestbook'` would be guestbook.php) and place it
-in adapters/sections. Go to the admin panel and clear the internal cache on `sp_available_sections`. You will now see your items that have been marked for spam in the admin tool of this plugin.
-- To be able to take action on the items in the queue, you must define the functions spam_protection_queue_ham(array $item, $service, array $data) for the Mark as Ham action and spam_protection_queue_spam(array $item, $service, array $data) for the Mark as Spam action in your adapter. You don't have to define all the params if you don't want, but they will be sent in that order. You will need to write how you want to deal with an item when you mark it for an action. Items will be ran through these functions one at a time. Refer to the "Available callback functions" section in the README for further information on possible options.
+- Create a file named after the section you assigned your items to (e.g `'section' => 'guestbook'` would be `guestbook.php`) and place it
+in adapters/sections. Go to the admin panel and clear the internal cache on `sp_available_sections`. In the moderation queue, you will now see the section name along with the other sections and you will be able to view items that were found to be spam for that section.
+- To be able to take action on the items in the queue, you must define the functions `spam_protection_queue_ham(array $item, $service, array $data)` for the Mark as Ham action and `spam_protection_queue_spam(array $item, $service, array $data)` for the Mark as Spam action in your adapter. You will need to write how you want to deal with an item when you mark it for an action inside the functions. Items will be ran through these functions one at a time. Refer to the "Available callback functions" section in the README for further information on possible options.
 
-For further information, you can refer to the comments.php adapter as it is a simple example.
+You can refer to the `comments.php` adapter as it is a simple example.
 
 ## Available callback functions in section adapters
 

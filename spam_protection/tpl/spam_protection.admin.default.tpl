@@ -39,7 +39,10 @@
 			{SP_SECTIONS} 
 		</div>
 		<div class="sp-page-nav">
-			<strong>{PHP.L.Pages}:</strong> {SP_PAGENAV} &nbsp;
+			<!-- IF {PHP.pagetotal} != 0 -->
+			<strong>{PHP.L.Pages}:</strong> {SP_PAGENAV_MAIN} &nbsp;
+			<!-- ENDIF -->
+			&nbsp;
 		</div>
 	</div>
 
